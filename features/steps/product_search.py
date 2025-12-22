@@ -12,7 +12,7 @@ def open_google(context):
     context.driver.get('https://www.google.com/')
 
 
-@when('Input {search_word} into search field')
+@when('Input "{search_word}" into search field')
 def input_search(context, search_word):
     search = context.driver.find_element(*SEARCH_INPUT)
     search.clear()
@@ -26,7 +26,7 @@ def click_search_icon(context):
     sleep(1)
 
 
-@then('Product results for {search_word} are shown')
+@then('Product results for "{search_word}" are shown')
 def verify_found_results_text(context, search_word):
     assert search_word.lower() in context.driver.current_url.lower(), \
         f'Expected query not in {context.driver.current_url.lower()}'

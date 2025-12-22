@@ -29,5 +29,5 @@ def after_step(context, step):
         print('\nStep failed: ', step)
 
 
-def after_scenario(context, feature):
+def after_scenario(context, scenario):
     context.driver.quit()
