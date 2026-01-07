@@ -1,12 +1,13 @@
-# Created by lana at 12/27/25
 Feature: Tests for search
 
-  Scenario: User can search for a tea on Target
+  Scenario Outline: User can search for a product
     Given Open Target main page
-    When Search for tea
-    Then Search results for tea are shown
+    When Search for <product>
+    Then Search results for <product_result> are shown
 
-  Scenario: User can search for a book on Target
-    Given Open Target main page
-#    When Search for tea
-#    Then Search results for tea are shown
+    Examples:
+      |product  |product_result  |
+      |tea      |tea             |
+      |coffee   |coffee          |
+      |xbox     |xbox            |
+      |tv       |tv              |
