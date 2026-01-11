@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 from behave import when, then
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from time import sleep
 
 # Empty cart
 EMPTY_CART_TEXT = (By.XPATH, "//*[text()='Your cart is empty']")
@@ -40,15 +40,16 @@ def click_first_product(context):
         EC.element_to_be_clickable(FIRST_PRODUCT)
     )
     first_product.click()
-
+    sleep(5)
 
 @when('Add product to cart')
 def add_product_to_cart(context):
+    sleep(15)
     add_to_cart = WebDriverWait(context.driver, 10).until(
         EC.element_to_be_clickable(ADD_TO_CART_BUTTON)
     )
     add_to_cart.click()
-
+    sleep(5)
 
 @when('Click view cart and checkout')
 def click_view_cart_and_checkout(context):
@@ -56,7 +57,7 @@ def click_view_cart_and_checkout(context):
         EC.element_to_be_clickable(VIEW_CART_BUTTON)
     )
     view_cart.click()
-
+    sleep(5)
 
 @then('Verify the cart has at least 1 item')
 @then('Verify cart has product in it')
