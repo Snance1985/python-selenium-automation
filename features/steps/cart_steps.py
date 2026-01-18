@@ -1,68 +1,39 @@
 from selenium.webdriver.common.by import By
-from behave import when, then
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from behave import given, when, then
 from time import sleep
 
-# Empty cart
-EMPTY_CART_TEXT = (By.XPATH, "//*[text()='Your cart is empty']")
 
-# Search results
-FIRST_PRODUCT = (By.CSS_SELECTOR, "[data-test='productTile']")
-
-# PDP (Product Detail Page)
-ADD_TO_CART_BUTTON = (By.CSS_SELECTOR, "[id^='addToCartButton']")
-
-# Cart
-VIEW_CART_BUTTON = (By.CSS_SELECTOR, "[data-test='viewCartBtn']")
-CART_ITEMS = (By.CSS_SELECTOR, "[data-test='cartItem']")
-
-# Cart icon
-CART_ICON = (By.XPATH, "//*[@data-test='@web/CartLink']")
+PRODUCT_NAME = (By.CSS_SELECTOR, "[data-test='cartItem-title']")
+TOTAL_TXT = (By.CSS_SELECTOR, "h2 [class*='styles_cart-summary-span']")
 
 
-@when('Click on Cart icon')
-def click_cart(context):
-    context.driver.find_element(*CART_ICON).click()
+@when('Open cart page')
+def open_cart(context):
+    context.driver.get('https://www.target.com/cart')
+
+
+@then('Verify cart has {amount} item(s)')
+def verify_cart_items(context, amount):
+    context.driver.wait.until(
+        EC.presence_of_element_located(TOTAL_TXT),
+        message='Subtotal text did not appear'
+    )
+
+    cart_summary = context.driver.find_element(*TOTAL_TXT).text
+    assert f'{amount} item' in cart_summary, f"Expected {amount} items but got {cart_summary}"
+
+
+@then('Verify product in cart is correct')
+def verify_product(context):
+    product_in_cart = context.driver.find_element(*PRODUCT_NAME).text
+    # print('\nProduct in cart:')
+    # print(product_in_cart)
+    expected = context.product_before_adding
+    assert product_in_cart[:20] == expected[:20],\
+        f'Expected product {expected[:20]} but got {product_in_cart[:20]}'
 
 
 @then('Your cart is empty message is shown')
-def verify_empty_cart(context):
-    empty_msg = WebDriverWait(context.driver, 10).until(
-        EC.visibility_of_element_located(EMPTY_CART_TEXT)
-    )
-    assert empty_msg.is_displayed(), "Empty cart message not displayed"
-
-
-@when('Click on the first product in results')
-def click_first_product(context):
-    first_product = WebDriverWait(context.driver, 10).until(
-        EC.element_to_be_clickable(FIRST_PRODUCT)
-    )
-    first_product.click()
-    sleep(5)
-
-@when('Add product to cart')
-def add_product_to_cart(context):
-    sleep(15)
-    add_to_cart = WebDriverWait(context.driver, 10).until(
-        EC.element_to_be_clickable(ADD_TO_CART_BUTTON)
-    )
-    add_to_cart.click()
-    sleep(5)
-
-@when('Click view cart and checkout')
-def click_view_cart_and_checkout(context):
-    view_cart = WebDriverWait(context.driver, 10).until(
-        EC.element_to_be_clickable(VIEW_CART_BUTTON)
-    )
-    view_cart.click()
-    sleep(5)
-
-@then('Verify the cart has at least 1 item')
-@then('Verify cart has product in it')
-def verify_cart_has_product(context):
-    items = WebDriverWait(context.driver, 10).until(
-        EC.presence_of_all_elements_located(CART_ITEMS)
-    )
-    assert len(items) >= 1, f"Expected at least 1 cart item, found {len(items)}"
+def verify_empty_cart_msg(context):
+    context.app.cart_page.verify_empty_cart_msg()
