@@ -1,8 +1,4 @@
-from selenium.webdriver.common.by import By
-from behave import given, when, then
-from time import sleep
-
-HEADER_LINKS = (By.CSS_SELECTOR, "[data-test*='@web/GlobalHeader/UtilityHeader/']")
+from behave import when, then
 
 
 @when('Click on cart icon')
@@ -17,9 +13,4 @@ def search_product(context, product):
 
 @then('Verify {expected_amount} top header links are shown')
 def verify_top_links_shown(context, expected_amount):
-    # print(type(expected_amount)) # "6"
-    expected_amount = int(expected_amount) # "6" str => 6 int
-    links = context.driver.find_elements(*HEADER_LINKS)
-    # print(links)
-    # assert 6 == 6
-    assert len(links) == expected_amount, f'Expected {expected_amount} header links, but got {len(links)}'
+    context.app.header.verify_header_links_count(int(expected_amount))

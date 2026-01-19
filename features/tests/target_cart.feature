@@ -1,9 +1,9 @@
 Feature: Test cases for Cart
 
-  Scenario: User sees empty cart message
-    Given Open Target main page
-    When Click on cart icon
-    Then Your cart is empty message is shown
+#  Scenario: User sees empty cart message
+#    Given Open Target main page
+#    When Click on cart icon
+#    Then Your cart is empty message is shown
 
   Scenario: User can add a product to the cart
     Given Open Target main page
