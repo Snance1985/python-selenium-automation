@@ -1,4 +1,12 @@
-from behave import when, then
+from behave import given, when, then
+
+@given('Open Target sign in page')
+def open_target_sign_in_page(context):
+    context.app.sign_in_page.open_target_signin()
+
+@when('Click Target terms and conditions link')
+def click_tc_link(context):
+    context.app.sign_in_page.click_tc_link()
 
 @when('Click on Account icon')
 def click_account(context):
